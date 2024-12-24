@@ -164,6 +164,8 @@ describe("Selectbox widget", () => {
     const selectbox = screen.getByRole("combobox")
 
     // Open dropdown
+    // TODO: Utilize user-event instead of fireEvent
+    // eslint-disable-next-line testing-library/prefer-user-event
     fireEvent.click(selectbox)
 
     // Get dropdown content and scroll
@@ -176,9 +178,13 @@ describe("Selectbox widget", () => {
     })
 
     // Close dropdown
+    // TODO: Utilize user-event instead of fireEvent
+    // eslint-disable-next-line testing-library/prefer-user-event
     fireEvent.keyDown(selectbox, { key: "Escape" })
 
     // Reopen dropdown
+    // TODO: Utilize user-event instead of fireEvent
+    // eslint-disable-next-line testing-library/prefer-user-event
     fireEvent.click(selectbox)
 
     // Check if scroll position was maintained
