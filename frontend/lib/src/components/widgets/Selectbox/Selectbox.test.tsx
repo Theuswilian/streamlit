@@ -16,7 +16,7 @@
 
 import React from "react"
 
-import { act, fireEvent, screen } from "@testing-library/react"
+import { act, fireEvent, screen, within } from "@testing-library/react"
 
 import { render } from "@streamlit/lib/src/test_util"
 import { WidgetStateManager } from "@streamlit/lib/src/WidgetStateManager"
@@ -152,5 +152,36 @@ describe("Selectbox widget", () => {
       },
       undefined
     )
+  })
+
+  it("maintains scroll position when reopening dropdown", () => {
+    const props = getProps({
+      options: Array.from({ length: 100 }, (_, i) => `Option ${i}`),
+    })
+    vi.spyOn(Utils, "convertRemToPx").mockImplementation(mockConvertRemToPx)
+
+    render(<Selectbox {...props} />)
+    const selectbox = screen.getByRole("combobox")
+
+    // Open dropdown
+    fireEvent.click(selectbox)
+
+    // Get dropdown content and scroll
+    const dropdown = screen.getByTestId("stSelectboxVirtualDropdown")
+    act(() => {
+      // Simulate scrolling down
+      const scrollEvent = new Event("scroll", { bubbles: true })
+      Object.defineProperty(dropdown, "scrollTop", { value: 500 })
+      dropdown.dispatchEvent(scrollEvent)
+    })
+
+    // Close dropdown
+    fireEvent.keyDown(selectbox, { key: "Escape" })
+
+    // Reopen dropdown
+    fireEvent.click(selectbox)
+
+    // Check if scroll position was maintained
+    expect(dropdown.scrollTop).toBe(500)
   })
 })
