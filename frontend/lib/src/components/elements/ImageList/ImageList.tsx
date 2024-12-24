@@ -144,6 +144,8 @@ function ImageList({
                     source={image.caption}
                     allowHTML={false}
                     isCaption
+                    // This is technically not a label but we want the same restrictions
+                    // as for labels (e.g. no Markdown tables or horizontal rule).
                     isLabel
                   />
                 </StyledCaption>
