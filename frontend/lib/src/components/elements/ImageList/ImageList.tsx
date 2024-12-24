@@ -143,6 +143,7 @@ function ImageList({
                   <StreamlitMarkdown
                     source={image.caption}
                     allowHTML={false}
+                    isCaption
                   />
                 </StyledCaption>
               )}
