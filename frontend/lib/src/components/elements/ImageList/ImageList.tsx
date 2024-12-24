@@ -144,6 +144,7 @@ function ImageList({
                     source={image.caption}
                     allowHTML={false}
                     isCaption
+                    isLabel
                   />
                 </StyledCaption>
               )}
