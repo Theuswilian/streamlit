@@ -342,7 +342,10 @@ def test_tabs_labels_handle_markdown(app: Page, assert_snapshot: ImageCompareFun
             name=f"st_tab-{case[0]}_{case[1]}",
         )
 
-def test_image_captions_handle_markdown(app: Page, assert_snapshot: ImageCompareFunction):
+
+def test_image_captions_handle_markdown(
+    app: Page, assert_snapshot: ImageCompareFunction
+):
     cases = [
         ["invalid", "table"],
         ["valid", "markdown"],
