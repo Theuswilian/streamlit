@@ -34,6 +34,7 @@ class CodeMixin:
         *,
         line_numbers: bool = False,
         wrap_lines: bool = False,
+        height: int | None = None,
     ) -> DeltaGenerator:
         """Display a code block with optional syntax highlighting.
 
@@ -59,6 +60,10 @@ class CodeMixin:
         wrap_lines : bool
             An optional boolean indicating whether to wrap lines. This defaults
             to ``False``.
+
+        height : int or None
+            Height of the code block in pixels. If None, height will adjust to content.
+            If set, content that exceeds the height will be scrollable.
 
         Examples
         --------
@@ -97,6 +102,8 @@ class CodeMixin:
         code_proto.language = language or "plaintext"
         code_proto.show_line_numbers = line_numbers
         code_proto.wrap_lines = wrap_lines
+        if height is not None:
+            code_proto.height = height
         return self.dg._enqueue("code", code_proto)
 
     @property

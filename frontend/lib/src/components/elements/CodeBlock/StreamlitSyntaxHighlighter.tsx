@@ -24,6 +24,7 @@ import {
 import CopyButton from "./CopyButton"
 import {
   StyledCodeBlock,
+  StyledCodeContent,
   StyledCopyButtonContainer,
   StyledPre,
 } from "./styled-components"
@@ -33,12 +34,14 @@ export interface StreamlitSyntaxHighlighterProps {
   language?: string
   showLineNumbers?: boolean
   wrapLines?: boolean
+  height?: number
 }
 
 export default function StreamlitSyntaxHighlighter({
   language,
   showLineNumbers,
   wrapLines,
+  height,
   children,
 }: Readonly<StreamlitSyntaxHighlighterProps>): ReactElement {
   const renderer = useCallback(
@@ -74,25 +77,30 @@ export default function StreamlitSyntaxHighlighter({
 
   return (
     <StyledCodeBlock className="stCode" data-testid="stCode">
-      <StyledPre>
-        <SyntaxHighlighter
-          language={language}
-          PreTag="div"
-          customStyle={{ backgroundColor: "transparent" }}
-          // We set an empty style object here because we have our own CSS styling that
-          // reacts on our theme.
-          style={{}}
-          lineNumberStyle={{}}
-          showLineNumbers={showLineNumbers}
-          wrapLongLines={wrapLines}
-          // Fix bug with wrapLongLines+showLineNumbers (see link below) by
-          // using a renderer that wraps individual lines of code in their
-          // own spans.
-          // https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/376
-          renderer={showLineNumbers && wrapLines ? renderer : undefined}
-        >
-          {children}
-        </SyntaxHighlighter>
+      <StyledPre style={height ? { height: `${height}px` } : undefined}>
+        <StyledCodeContent>
+          <SyntaxHighlighter
+            language={language}
+            PreTag="div"
+            customStyle={{
+              backgroundColor: "transparent",
+              height: height ? "100%" : undefined,
+            }}
+            // We set an empty style object here because we have our own CSS styling that
+            // reacts on our theme.
+            style={{}}
+            lineNumberStyle={{}}
+            showLineNumbers={showLineNumbers}
+            wrapLongLines={wrapLines}
+            // Fix bug with wrapLongLines+showLineNumbers (see link below) by
+            // using a renderer that wraps individual lines of code in their
+            // own spans.
+            // https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/376
+            renderer={showLineNumbers && wrapLines ? renderer : undefined}
+          >
+            {children}
+          </SyntaxHighlighter>
+        </StyledCodeContent>
       </StyledPre>
       {typeof children === "string" && children.trim() !== "" && (
         <StyledCopyButtonContainer>
