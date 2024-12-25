@@ -62,8 +62,9 @@ class CodeMixin:
             to ``False``.
 
         height : int or None
-            Height of the code block in pixels. If None, height will adjust to content.
-            If set, content that exceeds the height will be scrollable.
+            Desired height of the code block expressed in pixels. If None (default) the
+            code block grows to fit its content. If a fixed height, scrolling is enabled
+            for large content.
 
         Examples
         --------
