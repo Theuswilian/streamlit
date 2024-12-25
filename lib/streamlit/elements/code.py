@@ -103,8 +103,7 @@ class CodeMixin:
         code_proto.language = language or "plaintext"
         code_proto.show_line_numbers = line_numbers
         code_proto.wrap_lines = wrap_lines
-        if height is not None:
-            code_proto.height = height
+        code_proto.height = height or 0
         return self.dg._enqueue("code", code_proto)
 
     @property
