@@ -233,5 +233,6 @@ export const StyledCopyButton = styled.button(({ theme }) => ({
 
 export const StyledCodeContent = styled.div(({ theme }) => ({
   padding: theme.spacing.lg,
+  // Add padding to the right to account for the copy button
   paddingRight: theme.iconSizes.threeXL,
 }))
