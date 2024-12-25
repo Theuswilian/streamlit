@@ -81,6 +81,11 @@ export const StyledPre = styled.pre(({ theme }) => ({
   // Don't allow content to break outside
   overflow: "auto",
 
+  // Add padding around the code
+  padding: theme.spacing.lg,
+  // Add padding to the right to account for the copy button
+  paddingRight: theme.iconSizes.threeXL,
+
   code: { ...codeBlockStyle(theme) },
 
   // The token can consist of many lines, e.g. a triple-quote string, so
@@ -229,10 +234,4 @@ export const StyledCopyButton = styled.button(({ theme }) => ({
     transition: "none",
     color: theme.colors.bodyText,
   },
-}))
-
-export const StyledCodeContent = styled.div(({ theme }) => ({
-  padding: theme.spacing.lg,
-  // Add padding to the right to account for the copy button
-  paddingRight: theme.iconSizes.threeXL,
 }))
