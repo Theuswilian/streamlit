@@ -174,7 +174,9 @@ class UserInfoAuthTest(DeltaGeneratorTestCase):
         with self.assertRaises(AuthError) as ex:
             st.experimental_user.login("invalid_provider")
 
-        assert "Auth credentials are missing *'invalid_provider'*" in str(ex.exception)
+        assert "Auth credentials are missing for *'invalid_provider'*" in str(
+            ex.exception
+        )
 
     def test_user_login_redirect_uri_missing(self):
         """Tests that an error is raised if the redirect uri is missing"""
@@ -211,7 +213,7 @@ class UserInfoAuthTest(DeltaGeneratorTestCase):
                 st.experimental_user.login("google")
 
             assert (
-                "Auth credentials for 'google' are missing the following keys: ['client_id', 'client_secret', 'server_metadata_url']. Please check your configuration."
+                "Auth credentials for 'google' provider are missing the following keys: ['client_id', 'client_secret', 'server_metadata_url']. Please check your configuration."
                 in str(ex.exception)
             )
 
