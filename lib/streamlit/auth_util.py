@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
-from typing import TYPE_CHECKING, Mapping, TypedDict, cast
+from typing import TYPE_CHECKING, Any, Mapping, TypedDict, cast
 
 from streamlit import config
 from streamlit.errors import AuthError
@@ -110,6 +110,22 @@ def decode_provider_token(provider_token: str) -> ProviderTokenPayload:
     return cast("ProviderTokenPayload", payload)
 
 
+def generate_default_provider_section(auth_section) -> dict[str, Any]:
+    """Generate a default provider section for the 'auth' section of secrets.toml."""
+    default_provider_section = {}
+    if auth_section.get("client_id"):
+        default_provider_section["client_id"] = auth_section.get("client_id")
+    if auth_section.get("client_secret"):
+        default_provider_section["client_secret"] = auth_section.get("client_secret")
+    if auth_section.get("server_metadata_url"):
+        default_provider_section["server_metadata_url"] = auth_section.get(
+            "server_metadata_url"
+        )
+    if auth_section.get("client_kwargs"):
+        default_provider_section["client_kwargs"] = auth_section.get("client_kwargs")
+    return default_provider_section
+
+
 def validate_auth_credentials(provider: str) -> None:
     """Validate the general auth credentials and auth credentials for the given provider."""
     if not secrets_singleton.load_if_toml_exists():
@@ -128,14 +144,18 @@ def validate_auth_credentials(provider: str) -> None:
         )
 
     provider_section = auth_section.get(provider)
+
+    if provider_section is None and provider == "default":
+        provider_section = generate_default_provider_section(auth_section)
+
     if provider_section is None:
         raise AuthError(
-            f"Auth credentials are missing *'{provider}'*. Please check your configuration."
+            f"Auth credentials are missing for *'{provider}'* provider. Please check your configuration."
         )
 
     if not isinstance(provider_section, Mapping):
         raise AuthError(
-            f"Auth credentials for '{provider}' must be a toml section."
+            f"Auth credentials for '{provider}' provider must be a toml section."
             f" Please check your configuration."
         )
 
@@ -143,6 +163,6 @@ def validate_auth_credentials(provider: str) -> None:
     missing_keys = [key for key in required_keys if key not in provider_section]
     if missing_keys:
         raise AuthError(
-            f"Auth credentials for '{provider}' are missing the following keys: "
+            f"Auth credentials for '{provider}' provider are missing the following keys: "
             f"{missing_keys}. Please check your configuration."
         )

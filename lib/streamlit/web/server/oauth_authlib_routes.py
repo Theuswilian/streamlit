@@ -22,6 +22,7 @@ import tornado.web
 from streamlit.auth_util import (
     AuthCache,
     decode_provider_token,
+    generate_default_provider_section,
     get_secrets_auth_section,
 )
 from streamlit.errors import AuthError
@@ -43,6 +44,11 @@ def create_oauth_client(provider: str) -> tuple[TornadoOAuth2App, str]:
         redirect_uri = "/"
 
     provider_section = config.setdefault(provider, {})
+
+    if not provider_section and provider == "default":
+        provider_section = generate_default_provider_section(auth_section)
+        config["default"] = provider_section
+
     provider_client_kwargs = provider_section.setdefault("client_kwargs", {})
     if "scope" not in provider_client_kwargs:
         provider_client_kwargs["scope"] = "openid email profile"

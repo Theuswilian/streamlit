@@ -107,7 +107,7 @@ class UserInfoProxy(Mapping[str, Union[str, bool, None]]):
     """
 
     @gather_metrics("login")
-    def login(self, provider: str) -> None:
+    def login(self, provider: str = "default") -> None:
         """Initiate the login for the given provider.
 
         Parameters
@@ -115,6 +115,7 @@ class UserInfoProxy(Mapping[str, Union[str, bool, None]]):
         provider : str
             The provider to use for login. This value must match the name of a
             provider configured in the app's auth section of ``secrets.toml`` file.
+            If provider is not specified or "default", the default provider is used.
         """
         context = _get_script_run_ctx()
         if context is not None:
